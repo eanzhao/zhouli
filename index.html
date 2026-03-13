@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>周礼六官学习图</title>
+    <link rel="icon" href="data:,">
+    <style>
+        :root {
+            --bg-color: #fdfbf7;
+            --paper: rgba(244, 238, 220, 0.88);
+            --king-bg: #8c2e2e;
+            --minister-bg: #2b4c50;
+            --card-bg: rgba(244, 238, 220, 0.96);
+            --gold: #bd9b5b;
+            --gold-soft: rgba(189, 155, 91, 0.24);
+            --text-dark: #3a322c;
+            --text-light: #f9f6f0;
+            --muted: #655b52;
+            --jade-border: #7b8d82;
+            --shadow: 0 10px 24px rgba(58, 50, 44, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            background-image:
+                radial-gradient(circle at top left, rgba(189, 155, 91, 0.12), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(43, 76, 80, 0.08), transparent 32%),
+                repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(0, 0, 0, 0.025) 30px, rgba(0, 0, 0, 0.025) 31px);
+            color: var(--text-dark);
+            font-family: "STSong", "Songti SC", "Noto Serif SC", serif;
+            line-height: 1.6;
+            background-attachment: fixed;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .border-outer,
+        .border-inner {
+            position: fixed;
+            inset: 10px;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .border-outer {
+            border: 5px solid var(--jade-border);
+            opacity: 0.68;
+        }
+
+        .border-inner {
+            inset: 20px;
+            border: 1px solid var(--gold);
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1480px;
+            margin: 0 auto;
+            padding: 56px 20px 96px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 26px;
+        }
+
+        .header h1 {
+            margin: 0 0 10px;
+            font-size: clamp(2.2rem, 3.6vw, 3rem);
+            color: var(--king-bg);
+            letter-spacing: 0.22em;
+        }
+
+        .header p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+            letter-spacing: 0.14em;
+        }
+
+        .ornament {
+            margin: 28px auto 0;
+            width: 96px;
+            height: 12px;
+            border-top: 1px solid var(--gold);
+            border-bottom: 1px solid var(--gold);
+            position: relative;
+        }
+
+        .ornament::before {
+            content: "⬥";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -52%);
+            color: var(--king-bg);
+            background: var(--bg-color);
+            padding: 0 10px;
+            font-size: 0.9rem;
+        }
+
+        .context-panel,
+        .references-panel,
+        .status-panel {
+            background: var(--paper);
+            border: 1px solid rgba(189, 155, 91, 0.42);
+            border-left: 5px solid var(--king-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .context-panel {
+            max-width: 1080px;
+            margin: 0 auto 34px;
+            padding: 20px 22px;
+            text-align: left;
+        }
+
+        .panel-title {
+            margin: 0 0 12px;
+            color: var(--king-bg);
+            font-size: 1rem;
+            letter-spacing: 0.08em;
+        }
+
+        .context-panel ul,
+        .references-panel ul {
+            margin: 0;
+            padding-left: 1.35rem;
+            color: var(--muted);
+        }
+
+        .context-panel li,
+        .references-panel li {
+            margin-bottom: 0.5rem;
+        }
+
+        .org-tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 26px;
+        }
+
+        .king-wrap {
+            position: relative;
+            padding-bottom: 30px;
+        }
+
+        .king-wrap::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 2px;
+            height: 30px;
+            transform: translateX(-50%);
+            background: linear-gradient(to bottom, var(--gold), transparent);
+        }
+
+        .king-node {
+            background: var(--king-bg);
+            color: var(--text-light);
+            padding: 24px 52px;
+            border-radius: 8px;
+            border: 2px solid var(--gold);
+            outline: 6px solid rgba(140, 46, 46, 0.18);
+            box-shadow: 0 12px 24px rgba(58, 50, 44, 0.18);
+            text-align: center;
+        }
+
+        .king-title {
+            margin: 0;
+            font-size: clamp(2rem, 3vw, 2.45rem);
+            font-weight: 900;
+            letter-spacing: 0.3em;
+            text-indent: 0.3em;
+        }
+
+        .king-sub {
+            margin: 8px 0 0;
+            font-size: 1rem;
+            color: #ebd8b1;
+            letter-spacing: 0.14em;
+        }
+
+        .departments-row {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 18px;
+            align-items: start;
+        }
+
+        .dept-col {
+            min-width: 0;
+        }
+
+        .minister-node {
+            background: var(--minister-bg);
+            color: var(--text-light);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            padding: 16px 14px 14px;
+            box-shadow: var(--shadow);
+            position: relative;
+            min-height: 150px;
+        }
+
+        .seal {
+            position: absolute;
+            top: -12px;
+            right: -10px;
+            width: 34px;
+            height: 34px;
+            border-radius: 5px;
+            display: grid;
+            place-items: center;
+            background: var(--king-bg);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 2px 2px 5px rgba(58, 50, 44, 0.3);
+            transform: rotate(10deg);
+            font-size: 0.95rem;
+        }
+
+        .m-title {
+            margin: 0 0 6px;
+            font-size: 1.45rem;
+            letter-spacing: 0.08em;
+        }
+
+        .m-sub {
+            margin: 0 0 10px;
+            color: #d8cab0;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        .source-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.82rem;
+            color: #f2dfba;
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(242, 223, 186, 0.5);
+        }
+
+        .source-link:hover {
+            color: #fff3d9;
+            border-bottom-color: rgba(255, 243, 217, 0.9);
+        }
+
+        .sub-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .sub-node {
+            appearance: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            border: 1px solid rgba(189, 155, 91, 0.52);
+            border-left: 4px solid var(--king-bg);
+            border-radius: 6px;
+            background: var(--card-bg);
+            padding: 12px 12px 11px;
+            box-shadow: 0 4px 10px rgba(58, 50, 44, 0.06);
+            transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+            font: inherit;
+            color: inherit;
+        }
+
+        .sub-node:hover,
+        .sub-node:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(58, 50, 44, 0.12);
+            border-color: var(--gold);
+            outline: none;
+        }
+
+        .s-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .s-title {
+            margin: 0;
+            font-size: 1.02rem;
+            color: var(--king-bg);
+            font-weight: 700;
+        }
+
+        .s-tag {
+            flex-shrink: 0;
+            color: #8d7356;
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+        }
+
+        .s-desc {
+            margin: 7px 0 0;
+            color: #574d44;
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+
+        .references-panel {
+            max-width: 1080px;
+            margin: 40px auto 0;
+            padding: 18px 22px;
+        }
+
+        .references-panel a {
+            color: var(--minister-bg);
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(43, 76, 80, 0.4);
+        }
+
+        .references-panel a:hover {
+            color: #18363a;
+            border-bottom-color: rgba(24, 54, 58, 0.9);
+        }
+
+        .status-panel {
+            margin: 28px auto 0;
+            max-width: 1080px;
+            padding: 14px 18px;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(43, 76, 80, 0.42);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            width: min(880px, 100%);
+            max-height: min(82vh, 900px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-color);
+            background-image:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0)),
+                repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(0, 0, 0, 0.025) 30px, rgba(0, 0, 0, 0.025) 31px);
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            box-shadow: 0 18px 40px rgba(58, 50, 44, 0.22);
+        }
+
+        .modal-header {
+            position: relative;
+            padding: 26px 58px 18px 26px;
+            border-bottom: 1px solid rgba(189, 155, 91, 0.32);
+        }
+
+        .modal-title {
+            margin: 0;
+            color: var(--king-bg);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            letter-spacing: 0.08em;
+        }
+
+        .modal-subtitle {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            border: 0;
+            background: transparent;
+            color: var(--king-bg);
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: var(--text-dark);
+        }
+
+        .modal-body {
+            padding: 22px 26px 24px;
+            overflow-y: auto;
+            color: #4b4038;
+        }
+
+        .modal-body::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            border-radius: 999px;
+            background: rgba(189, 155, 91, 0.7);
+        }
+
+        .modal-section + .modal-section {
+            margin-top: 18px;
+        }
+
+        .modal-section h3 {
+            margin: 0 0 8px;
+            color: var(--minister-bg);
+            font-size: 0.96rem;
+            letter-spacing: 0.08em;
+        }
+
+        .modal-box {
+            background: rgba(244, 238, 220, 0.74);
+            border: 1px solid rgba(189, 155, 91, 0.28);
+            border-radius: 8px;
+            padding: 12px 14px;
+        }
+
+        .modal-box p {
+            margin: 0;
+            font-size: 0.98rem;
+            line-height: 1.8;
+        }
+
+        .modal-box.is-classical {
+            border-left: 4px solid var(--gold);
+        }
+
+        .modal-source {
+            margin-top: 18px;
+            font-size: 0.88rem;
+            color: var(--muted);
+        }
+
+        .modal-source a {
+            color: var(--minister-bg);
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(43, 76, 80, 0.4);
+        }
+
+        .loading,
+        .error-state {
+            width: min(720px, 100%);
+            margin: 24px auto 0;
+            padding: 18px 20px;
+            background: var(--paper);
+            border: 1px solid rgba(189, 155, 91, 0.4);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            color: var(--muted);
+            text-align: center;
+        }
+
+        @media (max-width: 1320px) {
+            .departments-row {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 860px) {
+            .container {
+                padding: 44px 14px 72px;
+            }
+
+            .border-outer {
+                inset: 6px;
+                border-width: 3px;
+            }
+
+            .border-inner {
+                inset: 12px;
+            }
+
+            .departments-row {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .king-wrap::after {
+                display: none;
+            }
+
+            .modal-header {
+                padding: 22px 52px 16px 20px;
+            }
+
+            .modal-body {
+                padding: 18px 20px 22px;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .departments-row {
+                grid-template-columns: 1fr;
+            }
+
+            .king-node {
+                padding: 20px 26px;
+            }
+
+            .context-panel,
+            .references-panel,
+            .status-panel {
+                padding: 16px;
+            }
+
+            .modal {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="border-outer"></div>
+    <div class="border-inner"></div>
+
+    <main class="container">
+        <header class="header">
+            <h1 id="pageTitle">周礼六官学习图</h1>
+            <p id="pageSubtitle">按《周礼》六官与《考工记》冬官条目重整</p>
+            <div class="ornament"></div>
+        </header>
+
+        <section class="context-panel" aria-labelledby="contextTitle">
+            <h2 class="panel-title" id="contextTitle">校读说明</h2>
+            <ul id="contextNotes"></ul>
+        </section>
+
+        <div class="org-tree">
+            <div class="king-wrap">
+                <div class="king-node">
+                    <h2 class="king-title">周王</h2>
+                    <p class="king-sub">天子 · 六官统摄中枢</p>
+                </div>
+            </div>
+
+            <div id="loadingState" class="loading">正在装载校订后的《周礼》条目……</div>
+            <div id="errorState" class="error-state" hidden>数据载入失败，请确认 `site-data.js` 存在且格式正确。</div>
+            <div id="departmentsRow" class="departments-row" hidden></div>
+        </div>
+
+        <section class="references-panel" aria-labelledby="referencesTitle">
+            <h2 class="panel-title" id="referencesTitle">资料来源</h2>
+            <ul id="referencesList"></ul>
+        </section>
+
+        <section class="status-panel" id="statusPanel">
+            本页以原文为主线，白话和补充说明偏向学习入门。如果要进一步核对句读、异文和注疏，建议继续对照维基文库或更完整的《周礼注疏》版本。
+        </section>
+    </main>
+
+    <div class="modal" id="infoModal" aria-hidden="true">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <button class="close-btn" id="closeBtn" type="button" aria-label="关闭弹窗">&times;</button>
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <p class="modal-subtitle" id="modalSubtitle"></p>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="./site-data.js"></script>
+    <script>
+        const dom = {
+            title: document.getElementById("pageTitle"),
+            subtitle: document.getElementById("pageSubtitle"),
+            notes: document.getElementById("contextNotes"),
+            references: document.getElementById("referencesList"),
+            row: document.getElementById("departmentsRow"),
+            loading: document.getElementById("loadingState"),
+            error: document.getElementById("errorState"),
+            modal: document.getElementById("infoModal"),
+            modalTitle: document.getElementById("modalTitle"),
+            modalSubtitle: document.getElementById("modalSubtitle"),
+            modalBody: document.getElementById("modalBody"),
+            closeBtn: document.getElementById("closeBtn")
+        };
+
+        let lastFocusedCard = null;
+
+        function createElement(tag, className, text) {
+            const element = document.createElement(tag);
+            if (className) {
+                element.className = className;
+            }
+            if (text) {
+                element.textContent = text;
+            }
+            return element;
+        }
+
+        function renderList(target, items, asLinks = false) {
+            target.innerHTML = "";
+
+            items.forEach((item) => {
+                const li = document.createElement("li");
+                if (asLinks) {
+                    const link = document.createElement("a");
+                    link.href = item.url;
+                    link.target = "_blank";
+                    link.rel = "noreferrer";
+                    link.textContent = item.label;
+                    li.appendChild(link);
+                } else {
+                    li.textContent = item;
+                }
+                target.appendChild(li);
+            });
+        }
+
+        function buildDepartment(section) {
+            const column = createElement("section", "dept-col");
+            const minister = createElement("div", "minister-node");
+
+            const seal = createElement("div", "seal", section.seal);
+            const title = createElement("h3", "m-title", section.title);
+            const desc = createElement("p", "m-sub", section.desc);
+            const source = document.createElement("a");
+            source.className = "source-link";
+            source.href = section.sourceUrl;
+            source.target = "_blank";
+            source.rel = "noreferrer";
+            source.textContent = "查看本卷原文";
+
+            minister.append(seal, title, desc, source);
+
+            const list = createElement("div", "sub-list");
+            section.items.forEach((item) => {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = "sub-node";
+                button.addEventListener("click", () => openModal(section, item, button));
+
+                const head = createElement("div", "s-head");
+                const cardTitle = createElement("p", "s-title", item.title);
+                const tag = createElement("span", "s-tag", "点击查看");
+                head.append(cardTitle, tag);
+
+                const summary = createElement("p", "s-desc", item.summary);
+                button.append(head, summary);
+                list.appendChild(button);
+            });
+
+            column.append(minister, list);
+            return column;
+        }
+
+        function buildModalSection(title, content, classical = false) {
+            const section = createElement("section", "modal-section");
+            const heading = createElement("h3", "", title);
+            const box = createElement("div", `modal-box${classical ? " is-classical" : ""}`);
+            const paragraph = createElement("p", "", content);
+            box.appendChild(paragraph);
+            section.append(heading, box);
+            return section;
+        }
+
+        function openModal(section, item, trigger) {
+            lastFocusedCard = trigger;
+            dom.modalTitle.textContent = item.title;
+            dom.modalSubtitle.textContent = `${section.title} · ${item.summary}`;
+            dom.modalBody.innerHTML = "";
+
+            if (item.meta) {
+                dom.modalBody.appendChild(buildModalSection(item.metaLabel || "建置", item.meta));
+            }
+            if (item.classical) {
+                dom.modalBody.appendChild(buildModalSection("原文节录", item.classical, true));
+            }
+            if (item.translation) {
+                dom.modalBody.appendChild(buildModalSection("白话", item.translation));
+            }
+            if (item.note) {
+                dom.modalBody.appendChild(buildModalSection("补充", item.note));
+            }
+
+            const source = createElement("p", "modal-source");
+            const sourceLink = document.createElement("a");
+            sourceLink.href = section.sourceUrl;
+            sourceLink.target = "_blank";
+            sourceLink.rel = "noreferrer";
+            sourceLink.textContent = "查看本卷原文";
+            source.append("原文卷页：", sourceLink);
+            dom.modalBody.appendChild(source);
+
+            dom.modal.classList.add("open");
+            dom.modal.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+            dom.closeBtn.focus();
+        }
+
+        function closeModal() {
+            dom.modal.classList.remove("open");
+            dom.modal.setAttribute("aria-hidden", "true");
+            document.body.style.overflow = "";
+            if (lastFocusedCard) {
+                lastFocusedCard.focus();
+            }
+        }
+
+        function renderPage(data) {
+            dom.title.textContent = data.meta.title;
+            dom.subtitle.textContent = data.meta.subtitle;
+            renderList(dom.notes, data.meta.notes);
+            renderList(dom.references, data.meta.references, true);
+
+            dom.row.innerHTML = "";
+            data.sections.forEach((section) => {
+                dom.row.appendChild(buildDepartment(section));
+            });
+
+            dom.loading.hidden = true;
+            dom.error.hidden = true;
+            dom.row.hidden = false;
+        }
+
+        function loadPage() {
+            try {
+                const data = window.__SITE_DATA__;
+                if (!data || !data.meta || !Array.isArray(data.sections)) {
+                    throw new Error("site-data.js did not provide valid data");
+                }
+                renderPage(data);
+            } catch (error) {
+                console.error(error);
+                dom.loading.hidden = true;
+                dom.row.hidden = true;
+                dom.error.hidden = false;
+            }
+        }
+
+        dom.closeBtn.addEventListener("click", closeModal);
+        dom.modal.addEventListener("click", (event) => {
+            if (event.target === dom.modal) {
+                closeModal();
+            }
+        });
+
+        window.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && dom.modal.classList.contains("open")) {
+                closeModal();
+            }
+        });
+
+        loadPage();
+    </script>
+</body>
+</html>
