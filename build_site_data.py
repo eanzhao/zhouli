@@ -400,8 +400,24 @@ def normalize_punctuation(text: str) -> str:
     )
 
 
+NOISE_LINE_PATTERNS = (
+    r"^制作工具：",
+    r"小说下载阅读器",
+    r"mybook66\.com",
+    r"^-{8,}$",
+)
+
+
+def is_noise_line(text: str) -> bool:
+    line = text.strip()
+    if not line:
+        return False
+    return any(re.search(pattern, line) for pattern in NOISE_LINE_PATTERNS)
+
+
 def normalize_fulltext(text: str) -> str:
     text = text.replace("\r", "")
+    text = "\n".join(line for line in text.splitlines() if not is_noise_line(line))
     for raw_title, display_title in DISPLAY_TITLE_MAP.items():
         text = text.replace(raw_title, display_title)
     text = re.sub(r"\n{3,}", "\n\n", text)
@@ -535,6 +551,8 @@ def build_section_indexes(raw_text: str) -> dict[str, list[str]]:
     for raw_line in raw_text.splitlines():
         line = raw_line.strip().lstrip("　")
         if not line:
+            continue
+        if is_noise_line(line):
             continue
 
         for section_key, marker in SECTION_MARKERS.items():
