@@ -11,13 +11,29 @@ OUTPUT_JSON = ROOT / "site-data.json"
 OUTPUT_JS = ROOT / "site-data.js"
 RAW_TEXT_PATH = ROOT / "周礼.txt"
 FULL_TITLES_PATH = ROOT / "zhouli_data.json"
+EXTRAS_PATH = ROOT / "zhouli_extras.json"
 
 
 SECTION_ORDER = ["天官", "地官", "春官", "夏官", "秋官", "冬官"]
+SECTION_MARKERS = {
+    "天官": "天官冢宰第一",
+    "地官": "地官司徒第二",
+    "春官": "春官宗伯第三",
+    "夏官": "夏官司马第四",
+    "秋官": "秋官司寇第五",
+    "冬官": "冬官考工记第六",
+}
 
 DISPLAY_TITLE_MAP = {
     "疱人": "庖人",
     "司剌": "司刺",
+    "司虣": "司暴",
+    "赞阝长": "酂长",
+    "眡": "视瞭",
+    "眡祲": "视祲",
+    "鏄师": "镈师",
+    "槀人": "槁人",
+    "荒氏湅丝": "㡛氏湅丝",
     "\ue11d氏为量": "栗氏为量",
     "陶人为": "陶人为甗",
     "瓬人为簋": "旊人为簋",
@@ -27,10 +43,18 @@ DISPLAY_TITLE_MAP = {
 RAW_TITLE_MAP = {
     "庖人": "庖人",
     "司刺": "司刺",
+    "司暴": "司虣",
+    "酂长": "赞阝长",
+    "视瞭": "眡",
+    "视祲": "眡祲",
+    "镈师": "鏄师",
+    "槁人": "槀人",
+    "㡛氏湅丝": "荒氏湅丝",
     "栗氏为量": "\ue11d氏为量",
     "陶人为甗": "陶人为",
     "旊人为簋": "瓬人为簋",
     "庐人为庐器": "庐人为庐器",
+    "神仕": "凡以神仕者",
 }
 
 WINTER_EXTRA_ORDER = [
@@ -62,11 +86,25 @@ SECTION_NOTES = {
     "冬官": "属《考工记》工艺规范条目，重点是材料、尺度和制作法则。",
 }
 
+SECTION_COMMENTARY_URLS = {
+    "天官": "https://ctext.org/rites-of-zhou/tian-guan-zhong-zai/zhs",
+    "地官": "https://ctext.org/rites-of-zhou/di-guan-si-tu/zhs",
+    "春官": "https://ctext.org/rites-of-zhou/chun-guan-zong-bo/zhs",
+    "夏官": "https://ctext.org/rites-of-zhou/xia-guan-si-ma/zhs",
+    "秋官": "https://ctext.org/rites-of-zhou/qiu-guan-si-kou/zhs",
+    "冬官": "https://ctext.org/rites-of-zhou/dong-guan-kao-gong-ji/zhs",
+}
+
 KNOWN_LACUNA_TITLES = {
     "掌疆": {
         "summary": "现存通行本此条正文多已缺佚。",
         "translation": "目前常见底本这里只保留编制名单，未见完整职掌正文，通常视作阙文或脱简，不宜硬译。",
         "note": "从官名与编排位置看，它大概与疆界、军防或巡守事务有关，但仍需参看注疏补证。",
+    },
+    "司禄": {
+        "summary": "此条正文今已亡佚，仅存叙官编制。",
+        "translation": "现存通行本只见司禄的建置名单，不见展开的职掌正文；5000言对应页也直接标作“司禄（阙）”。",
+        "note": "可知它属于地官仓廪赋禄系统的一环，但具体职责已难从现存经文复原。",
     },
 }
 
@@ -100,6 +138,36 @@ SECTION_SPECIFIC_NOTES = {
 }
 
 ITEM_OVERRIDES = {
+    "大宰": {
+        "groupLabel": "所属序官",
+        "group": "治官之属",
+        "peerLabel": "同列官",
+        "peer": "大宰、小宰、宰夫",
+    },
+    "小宰": {
+        "groupLabel": "所属序官",
+        "group": "治官之属",
+        "peerLabel": "同列官",
+        "peer": "大宰、小宰、宰夫",
+    },
+    "宰夫": {
+        "groupLabel": "所属序官",
+        "group": "治官之属",
+        "peerLabel": "同列官",
+        "peer": "大宰、小宰、宰夫",
+    },
+    "女史": {
+        "summary": "掌王后礼职、内政副本与内宫文令，凡礼事皆执礼书随从。",
+        "classical": "女史掌王后之礼职，掌内治之贰，以诏后治内政。逆内宫，书内令。凡后之事，以礼从。",
+        "translation": "女史掌管王后礼职，保存内政法令副本，用来禀告王后处理内政；并核计内宫财用、书写内令，凡王后参与礼事都执礼书随从提醒。",
+        "note": "相当于王后内廷中的女官书记与礼仪官。",
+    },
+    "内司服": {
+        "summary": "掌王后六服及内外命妇服制的辨别与供掌。",
+        "classical": "内司服掌王后之六服：袆衣、揄狄、阙狄、鞠衣、展衣、缘衣，素沙。辨外、内命妇之服，鞠衣、展衣、缘衣，素沙。",
+        "translation": "内司服掌管王后所穿的六种服装，并辨别内外命妇各自应服的等差制度。",
+        "note": "职责重在统掌后妃命妇服制等级，不是单纯的缝制工官。",
+    },
     "栗氏为量": {
         "summary": "讲铜量器的校准流程和标准容量。",
         "translation": "这条说的是铸量器的工序：先反复熔炼金锡，确认材质稳定，再称重、校平、校准，最后制成标准量器。后面的尺寸条文则规定了鬴、豆等量器的深浅、方圆和耳臂比例，用来统一容量标准。",
@@ -165,6 +233,80 @@ ITEM_OVERRIDES = {
         "translation": "这条最出名。它规定理想都城应是方九里、三门、九经九纬、左祖右社、面朝后市，后面又补出夏后氏世室的尺度。换成今天的话，就是把城郭、宗庙、社稷和市场的标准布局写成了条文。",
         "note": "“左祖右社、面朝后市”就出自这一条。",
     },
+    "巾车": {
+        "summary": "掌公车政令、车用旗物与车辆出入调度。",
+        "classical": "巾车掌公车之政令，辨其用与其旗物，而等叙之，以治其出入。",
+        "translation": "巾车掌管公家车辆的制度与调度，辨别各种车的用途及所建旌旗，依等级次序配置，并统理车辆出入。",
+        "note": "后文还细分王之五路、丧车与年终会计，这里先保留总职掌。",
+    },
+    "司暴": {
+        "metaLabel": "建置",
+        "meta": "十肆则一人。",
+    },
+    "车仆": {
+        "summary": "掌诸戎车副贰，军旅会同供车，并掌大射三乏。",
+        "classical": "车仆掌戎路之萃，广车之萃，阙车之萃，苹车之萃，轻车之萃。凡师共革车，各以其萃。会同亦如之。大丧廞革车。大射，共三乏。",
+        "translation": "车仆掌管戎路、广车、阙车、苹车、轻车的副贰车辆；征伐和会同时供给相应革车，大丧时陈列明器车，又在大射礼中供给三乏。",
+        "note": "“萃”指副车或备用车，是正车之外的随从车辆。",
+    },
+    "酂长": {
+        "metaLabel": "建置",
+        "meta": "每酂中士一人。",
+    },
+    "矿人": {
+        "summary": "掌金玉锡石产地，划禁守护，并勘图授权开采。",
+        "metaLabel": "建置",
+        "meta": "中士二人、下士四人、府二人、史二人、胥四人、徒四十人。",
+        "classical": "矿人掌金玉锡石之地，而为之厉禁以守之。若以时取之，则物其地图而授之，巡其禁令。",
+        "translation": "矿人掌管金玉、锡石等矿产之地，划定禁界并加以守护；到了应当开采的时候，还要勘定矿区、绘图授人，并巡视是否有人违犯禁令。",
+        "note": "兼具矿产保护、测绘分授与禁令巡察几项职责。",
+    },
+    "饎人": {
+        "summary": "掌祭祀、王后日常与宾客飨食所需的簠簋饭食。",
+        "classical": "饎人掌凡祭祀共盛，共王及后之六食。凡宾客共其簠簋之食，飨、食亦如之。",
+        "translation": "饎人负责祭祀所用簠簋熟食的供给，也供王和王后的六谷饭食；接待宾客以及举行飨礼、食礼时，所需饭食同样由饎人备办。",
+        "note": "5000言对应页题名缺字，但正文和叙官编制都能与“饎人”互相印证。",
+    },
+    "瞽矇": {
+        "summary": "掌歌诗与诸乐器演奏，并佐大师教授《九德》、六诗。",
+        "classical": "瞽矇掌播鼗、柷、敔、埙、箫、管、弦、歌，讽诵诗，世奠系，鼓琴瑟。掌《九德》、六诗之歌，以役大师。",
+        "translation": "瞽矇掌演奏鼗、柷、敔、埙、箫、管、弦等乐器与歌唱，讽诵诗篇、世系等文字，并鼓琴瑟；又掌《九德》和六诗的歌唱，听从大师调度。",
+        "note": "属于春官乐官体系中的盲乐工与歌诵之官。",
+    },
+    "视瞭": {
+        "metaLabel": "建置",
+        "meta": "三百人、府四人、史八人、胥十有二人、徒百有二十人。",
+    },
+    "廋人": {
+        "summary": "掌十二闲政教与养马训练，并主持祭马祖等马政礼事。",
+        "classical": "廋人掌十有二闲之政教，以阜马、佚特、教駣、攻驹，及祭马祖、祭闲之先牧，及执驹、散马耳、圉马。",
+        "translation": "廋人掌十二闲的政令和教养事务，负责育肥马匹、安养种马、训练小马、调教驹马；并主持祭马祖、祭闲先牧，以及执驹、散马耳、圉马等养马事务。",
+        "note": "原站对应页疑似串到了别条，这里按通行古籍所存正文补回。",
+    },
+    "原师": {
+        "summary": "掌四方地名与原隰等地形物产，并辨可封邑之地。",
+        "classical": "原师掌四方之地名，辨其丘、陵、坟、衍、原、隰之名物、之可以封邑者。",
+        "translation": "原师掌管四方地形地名，辨别丘、陵、坟、衍、原、隰等地貌的名称与物产，并判断哪些地方适合划出封邑。",
+        "note": "属于夏官中与地形、封邑和测土事务相连的一类官。",
+    },
+    "修闾氏": {
+        "summary": "掌考核都城守宿巡夜与追胥捕盗之事，并行赏罚。",
+        "classical": "修闾氏掌比国中宿、互、柝者，与其国粥，而比其追胥者，而赏罚之。",
+        "translation": "修闾氏负责考核都城中值宿守卫、设互巡夜和击柝的人，以及由国家供食的羡卒，并按他们追捕外寇、伺察盗贼的成效施行赏罚。",
+        "note": "偏向都城夜禁、巡逻和基层治安考核。",
+    },
+    "雕人": {
+        "summary": "通行本正文已阙，现仅知其为负责雕琢的一类工匠。",
+        "classical": "雕人，阙。",
+        "translation": "现存《考工记》已不见雕人的正文。5000言仅保留解释说它大致属于负责雕琢的工匠，可能与骨角等器物的雕饰有关。",
+        "note": "相关注疏多据字义推测其职责，难像其他工官那样恢复完整工序。",
+    },
+    "段氏": {
+        "summary": "通行本正文已阙，题名只存于攻金之工次序中。",
+        "classical": "段氏，阙。",
+        "translation": "现存《考工记》没有保留下“段氏”的正文，通行整理本通常直接标作“段氏（阙）”。目前只能确认它列在攻金之工中，具体工序已不可详考。",
+        "note": "多种整理本和考工图书都把这一条视作缺文。",
+    },
     "车人之事": {
         "summary": "讲车部构件的一套基准尺度。",
         "translation": "这条先把宣、欘、柯、磬折几个尺寸单位连起来，等于先定一套车器制作时反复使用的比例尺。它像后面车具各条的起算规则。",
@@ -184,6 +326,23 @@ ITEM_OVERRIDES = {
         "summary": "讲制弓的材料、时令和受力原则。",
         "translation": "弓人制弓要按时节取六材，再把木、角、筋、胶、丝、漆各自的作用配合起来：有的求远，有的求疾，有的求深，有的求牢。后文其实是一整套材料选择、加工时序和受力校验的方法。",
         "note": "原文极长，这里只节录开头一段，后面还有大量材料与受力细则。",
+    },
+}
+
+SECTION_ITEM_OVERRIDES = {
+    ("地官", "槁人"): {
+        "summary": "掌内外朝值勤口粮，并供养老飨礼之食，兼养祭犬。",
+        "metaLabel": "建置",
+        "meta": "奄八人、女槁每奄二人、奚五人。",
+        "classical": "槁人掌共外、内朝冗食者之食。若飨耆老、孤子、士、庶子，共其食。掌豢祭祀之犬。",
+        "translation": "地官槁人负责供给外朝、内朝值勤人员的饭食；国家以飨礼款待老人、孤子、士与庶子时，也由他供食，并兼管祭祀用犬的豢养。",
+        "note": "这一条属于地官供给系统，和夏官掌兵工财料的同名“槁人”不是一回事。",
+    },
+    ("夏官", "槁人"): {
+        "summary": "掌受财给工、考课弓矢成品，并总记出入账册。",
+        "classical": "槁人掌受财于职金，以赍其工。弓六物为三等，弩四物亦如之。矢八物皆三等，箙亦如之。春献素，秋献成，书其等以飨工。乘其事，试其弓弩，以下上其食而诛赏。乃入功于司弓矢及缮人。凡赍财与其出入，皆在槁人，以待会而考之，亡者阙之。",
+        "translation": "夏官槁人从职金领取财货转授工匠，分等登记弓、弩、矢、箙的成品质量，按春献素、秋献成的节点验收考课，并据制作优劣决定食粮与赏罚；财货和成品出入账册也都由槁人掌管。",
+        "note": "相当于夏官兵甲工官里的财料发放、质检和会计角色。",
     },
 }
 
@@ -235,6 +394,14 @@ def normalize_punctuation(text: str) -> str:
         .replace("，，", "，")
         .strip()
     )
+
+
+def normalize_fulltext(text: str) -> str:
+    text = text.replace("\r", "")
+    for raw_title, display_title in DISPLAY_TITLE_MAP.items():
+        text = text.replace(raw_title, display_title)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text.strip()
 
 
 def take_excerpt(text: str, limit: int = 84) -> str:
@@ -321,9 +488,16 @@ def is_personnel_line(text: str) -> bool:
     text = text.strip()
     if not text:
         return False
-    if text.startswith(("每", "凡")) and "掌" not in text[:24]:
+    lead = normalize_punctuation(text).split("。", 1)[0].strip()
+    if not lead:
+        return False
+    if lead.startswith(("每", "凡")) and "掌" not in lead[:24]:
         return True
-    return text.startswith(PERSONNEL_START_MARKERS)
+    if lead.startswith(PERSONNEL_START_MARKERS):
+        return True
+    if any(marker in lead[:24] for marker in ("掌", "之职", "为", "之事")):
+        return False
+    return looks_like_personnel(lead)
 
 
 def build_orders(core_data: dict, raw_titles: dict) -> dict[str, list[str]]:
@@ -331,25 +505,43 @@ def build_orders(core_data: dict, raw_titles: dict) -> dict[str, list[str]]:
     core_sections = {section["key"]: section for section in core_data["sections"]}
 
     for section_key in SECTION_ORDER:
-        existing = [item["title"] for item in core_sections[section_key]["items"]]
-        remaining = []
+        existing = [
+            normalize_display_title(item["title"])
+            for item in core_sections[section_key]["items"]
+        ]
+        desired = []
         for item in raw_titles[section_key]:
             title = normalize_display_title(item["title"])
-            if title not in existing and title not in remaining:
-                remaining.append(title)
+            if title not in desired:
+                desired.append(title)
 
-        if section_key == "冬官":
-            for title in WINTER_EXTRA_ORDER:
-                if title not in existing and title not in remaining:
-                    remaining.append(title)
+        for title in existing:
+            if title not in desired:
+                desired.append(title)
 
-        orders[section_key] = existing + remaining
+        orders[section_key] = desired
 
     return orders
 
 
-def build_text_index(raw_text: str) -> list[str]:
-    return [line.strip().lstrip("　") for line in raw_text.splitlines() if line.strip()]
+def build_section_indexes(raw_text: str) -> dict[str, list[str]]:
+    section_lines = {section: [] for section in SECTION_ORDER}
+    current_section = None
+
+    for raw_line in raw_text.splitlines():
+        line = raw_line.strip().lstrip("　")
+        if not line:
+            continue
+
+        for section_key, marker in SECTION_MARKERS.items():
+            if marker in line:
+                current_section = section_key
+                break
+
+        if current_section:
+            section_lines[current_section].append(line)
+
+    return section_lines
 
 
 def find_personnel(lines: list[str], title: str) -> str | None:
@@ -384,8 +576,131 @@ def find_description(lines: list[str], title: str) -> str | None:
     return candidates[0]
 
 
-def build_generated_item(lines: list[str], section_key: str, title: str) -> dict:
-    personnel = find_personnel(lines, title)
+def find_description_indexes(lines: list[str], titles: list[str]) -> dict[str, int]:
+    indexes: dict[str, int] = {}
+    cursor = 0
+
+    for title in titles:
+        raw_title = raw_lookup_title(title)
+        for idx in range(cursor, len(lines)):
+            line = lines[idx]
+            if not line.startswith(raw_title):
+                continue
+            if is_personnel_line(strip_leading_title(line, title)):
+                continue
+            indexes[title] = idx
+            cursor = idx + 1
+            break
+
+    return indexes
+
+
+def build_section_fulltexts(lines: list[str], titles: list[str]) -> tuple[str, dict[str, str]]:
+    indexes = find_description_indexes(lines, titles)
+    available_titles = [title for title in titles if title in indexes]
+    item_texts: dict[str, str] = {}
+
+    for position, title in enumerate(available_titles):
+        start = indexes[title]
+        end = indexes[available_titles[position + 1]] if position + 1 < len(available_titles) else len(lines)
+        item_texts[title] = normalize_fulltext("\n".join(lines[start:end]))
+
+    first_start = indexes[available_titles[0]] if available_titles else len(lines)
+    prelude = normalize_fulltext("\n".join(lines[:first_start]))
+    return prelude, item_texts
+
+
+def normalize_personnel_text(text: str) -> str:
+    text = (
+        text.replace("", "。")
+        .replace("．", "。")
+        .replace("：", "")
+        .replace(":", "")
+        .replace("\n", "")
+    )
+    text = normalize_punctuation(text)
+    return text.strip("，、； ")
+
+
+def append_personnel_text(base: str, extra: str) -> str:
+    base = base.strip()
+    extra = extra.strip("，、； ")
+    if not base:
+        return extra
+    if not extra:
+        return base
+    if base.endswith("。") or extra.startswith("。"):
+        return base + extra
+    return base + "。" + extra
+
+
+def looks_like_personnel(snippet: str) -> bool:
+    text = snippet.strip("，、； ")
+    if not text:
+        return False
+    if text.startswith(("之职", "掌", "帅", "率", "使", "若", "凡", "乃", "以")):
+        return False
+    if text.startswith(PERSONNEL_START_MARKERS):
+        return True
+    if text.startswith(("每", "王", "倍", "旅", "五家", "二乡", "三乡", "四乡")):
+        return True
+    return bool(re.search(r"[一二三四五六七八九十百千两有]+人", text))
+
+
+def build_personnel_map(prelude_text: str, titles: list[str]) -> dict[str, str]:
+    normalized = normalize_fulltext(prelude_text)
+    personnel_map: dict[str, str] = {}
+    title_lookup = [(raw_lookup_title(title), title) for title in titles]
+
+    for raw_line in normalized.splitlines():
+        line = normalize_personnel_text(raw_line)
+        if not line:
+            continue
+
+        previous_title: str | None = None
+        sentences = [part for part in re.split(r"(?<=。)", line) if part]
+        for sentence in sentences:
+            matches = []
+            for raw_title, title in title_lookup:
+                start = 0
+                while True:
+                    pos = sentence.find(raw_title, start)
+                    if pos == -1:
+                        break
+                    matches.append((pos, -len(raw_title), raw_title, title))
+                    start = pos + len(raw_title)
+
+            matches.sort()
+
+            filtered = []
+            for pos, neg_len, raw_title, title in matches:
+                if filtered and pos == filtered[-1][0]:
+                    continue
+                if filtered and pos < filtered[-1][0] + len(filtered[-1][2]):
+                    continue
+                filtered.append((pos, neg_len, raw_title, title))
+
+            if filtered:
+                for idx, (pos, _neg_len, raw_title, title) in enumerate(filtered):
+                    next_pos = filtered[idx + 1][0] if idx + 1 < len(filtered) else len(sentence)
+                    snippet = normalize_personnel_text(sentence[pos + len(raw_title) : next_pos])
+                    snippet = snippet.lstrip("，、； ").rstrip("，、； ")
+                    if looks_like_personnel(snippet):
+                        personnel_map[title] = snippet
+                        previous_title = title
+                continue
+
+            extra = normalize_personnel_text(sentence).rstrip("，、； ")
+            if previous_title and extra:
+                personnel_map[previous_title] = append_personnel_text(personnel_map.get(previous_title, ""), extra)
+
+    return personnel_map
+
+
+def build_generated_item(
+    lines: list[str], section_key: str, title: str, prelude_personnel: dict[str, str] | None = None
+) -> dict:
+    personnel = (prelude_personnel or {}).get(title) or find_personnel(lines, title)
     description = find_description(lines, title)
 
     if title in KNOWN_LACUNA_TITLES and (not description or "阙" in description):
@@ -429,9 +744,6 @@ def build_generated_item(lines: list[str], section_key: str, title: str) -> dict
         "note": SECTION_SPECIFIC_NOTES.get(title, SECTION_NOTES[section_key]),
     }
 
-    if title in ITEM_OVERRIDES:
-        item.update(ITEM_OVERRIDES[title])
-
     if personnel:
         item["metaLabel"] = "建置"
         item["meta"] = personnel
@@ -439,14 +751,35 @@ def build_generated_item(lines: list[str], section_key: str, title: str) -> dict
     return item
 
 
+def apply_item_overrides(item: dict, section_key: str) -> dict:
+    patched = dict(item)
+    section_override = SECTION_ITEM_OVERRIDES.get((section_key, patched["title"]))
+    if section_override:
+        patched.update(section_override)
+    override = ITEM_OVERRIDES.get(patched["title"])
+    if override:
+        patched.update(override)
+    return patched
+
+
+def extra_key(section_key: str, title: str) -> str:
+    return f"{section_key}|||{title}"
+
+
 def main() -> None:
     core_data = json.loads(CORE_PATH.read_text(encoding="utf-8"))
     full_titles = json.loads(FULL_TITLES_PATH.read_text(encoding="utf-8"))
-    lines = build_text_index(RAW_TEXT_PATH.read_text(encoding="utf-8"))
+    section_lines = build_section_indexes(RAW_TEXT_PATH.read_text(encoding="utf-8"))
+    extras = json.loads(EXTRAS_PATH.read_text(encoding="utf-8")) if EXTRAS_PATH.exists() else {"sections": {}, "items": {}}
+    extra_sections = extras.get("sections", {})
+    extra_items = extras.get("items", {})
 
     core_sections = {section["key"]: section for section in core_data["sections"]}
     core_items = {
-        section["key"]: {item["title"]: item for item in section["items"]}
+        section["key"]: {
+            normalize_display_title(item["title"]): {**item, "title": normalize_display_title(item["title"])}
+            for item in section["items"]
+        }
         for section in core_data["sections"]
     }
 
@@ -459,21 +792,47 @@ def main() -> None:
 
     for section_key in SECTION_ORDER:
         base_section = core_sections[section_key]
+        prelude_text, local_fulltexts = build_section_fulltexts(section_lines[section_key], orders[section_key])
+        prelude_personnel = build_personnel_map("\n".join(section_lines[section_key]), orders[section_key])
         section = {
             "key": base_section["key"],
             "title": base_section["title"],
             "seal": base_section["seal"],
             "desc": base_section["desc"],
             "sourceUrl": base_section["sourceUrl"],
+            "commentaryUrl": SECTION_COMMENTARY_URLS.get(section_key, ""),
+            "translationUrl": extra_sections.get(section_key, {}).get("translationUrl", ""),
             "items": [],
         }
+        section_full_parts = [prelude_text] if prelude_text else []
 
         for title in orders[section_key]:
             if title in core_items[section_key]:
-                item = core_items[section_key][title]
+                item = dict(core_items[section_key][title])
             else:
-                item = build_generated_item(lines, section_key, title)
+                item = build_generated_item(section_lines[section_key], section_key, title, prelude_personnel)
+
+            if not item.get("meta") and title in prelude_personnel:
+                item["metaLabel"] = item.get("metaLabel") or "建置"
+                item["meta"] = prelude_personnel[title]
+
+            item = apply_item_overrides(item, section_key)
+
+            extra_item = extra_items.get(extra_key(section_key, title), {})
+            full_classical = extra_item.get("fullClassical") or local_fulltexts.get(title) or item.get("classical", "")
+            full_translation = extra_item.get("fullTranslation") or item.get("translation", "")
+
+            if full_classical:
+                item["fullClassical"] = normalize_fulltext(full_classical)
+                section_full_parts.append(item["fullClassical"])
+            if full_translation:
+                item["fullTranslation"] = normalize_fulltext(full_translation)
+            if extra_item.get("pageUrl") and (extra_item.get("fullClassical") or extra_item.get("fullTranslation")):
+                item["pageUrl"] = extra_item["pageUrl"]
+
             section["items"].append(item)
+
+        section["fullClassical"] = "\n\n".join(part for part in section_full_parts if part)
 
         output["sections"].append(section)
 

@@ -88,6 +88,16 @@
             letter-spacing: 0.14em;
         }
 
+        .header-meta {
+            position: relative;
+            margin-top: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
         .ornament {
             margin: 28px auto 0;
             width: 96px;
@@ -109,21 +119,12 @@
             font-size: 0.9rem;
         }
 
-        .context-panel,
-        .references-panel,
-        .status-panel {
+        .references-panel {
             background: var(--paper);
             border: 1px solid rgba(189, 155, 91, 0.42);
             border-left: 5px solid var(--king-bg);
             border-radius: 8px;
             box-shadow: var(--shadow);
-        }
-
-        .context-panel {
-            max-width: 1080px;
-            margin: 0 auto 34px;
-            padding: 20px 22px;
-            text-align: left;
         }
 
         .panel-title {
@@ -133,14 +134,12 @@
             letter-spacing: 0.08em;
         }
 
-        .context-panel ul,
         .references-panel ul {
             margin: 0;
             padding-left: 1.35rem;
             color: var(--muted);
         }
 
-        .context-panel li,
         .references-panel li {
             margin-bottom: 0.5rem;
         }
@@ -214,7 +213,20 @@
             padding: 16px 14px 14px;
             box-shadow: var(--shadow);
             position: relative;
-            min-height: 150px;
+            min-height: 116px;
+        }
+
+        .minister-header {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .minister-title-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-right: 28px;
         }
 
         .seal {
@@ -234,19 +246,20 @@
         }
 
         .m-title {
-            margin: 0 0 6px;
+            margin: 0;
             font-size: 1.45rem;
             letter-spacing: 0.08em;
         }
 
         .m-sub {
-            margin: 0 0 10px;
+            margin: 0;
             color: #d8cab0;
             font-size: 0.92rem;
-            line-height: 1.5;
+            line-height: 1.55;
         }
 
-        .source-link {
+        .source-link,
+        .source-button {
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
@@ -254,11 +267,21 @@
             color: #f2dfba;
             text-decoration: none;
             border-bottom: 1px dashed rgba(242, 223, 186, 0.5);
+            background: transparent;
+            padding: 0;
+            border-top: 0;
+            border-left: 0;
+            border-right: 0;
+            cursor: pointer;
+            font: inherit;
         }
 
-        .source-link:hover {
+        .source-link:hover,
+        .source-button:hover,
+        .source-button:focus-visible {
             color: #fff3d9;
             border-bottom-color: rgba(255, 243, 217, 0.9);
+            outline: none;
         }
 
         .sub-list {
@@ -269,7 +292,6 @@
         }
 
         .sub-node {
-            appearance: none;
             width: 100%;
             text-align: left;
             cursor: pointer;
@@ -294,9 +316,7 @@
 
         .s-head {
             display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            align-items: flex-start;
+            align-items: center;
         }
 
         .s-title {
@@ -306,18 +326,110 @@
             font-weight: 700;
         }
 
-        .s-tag {
-            flex-shrink: 0;
-            color: #8d7356;
-            font-size: 0.78rem;
-            letter-spacing: 0.04em;
-        }
-
         .s-desc {
-            margin: 7px 0 0;
+            margin: 8px 0 0;
             color: #574d44;
             font-size: 0.88rem;
-            line-height: 1.55;
+            line-height: 1.6;
+        }
+
+        .info-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .info-wrap.is-header {
+            position: static;
+        }
+
+        .info-btn {
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: 1px solid rgba(189, 155, 91, 0.65);
+            border-radius: 999px;
+            background: rgba(244, 238, 220, 0.92);
+            color: var(--king-bg);
+            font: inherit;
+            font-size: 0.9rem;
+            font-weight: 700;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(58, 50, 44, 0.08);
+            transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+        }
+
+        .info-btn:hover,
+        .info-btn:focus-visible {
+            transform: translateY(-1px);
+            border-color: var(--gold);
+            box-shadow: 0 8px 14px rgba(58, 50, 44, 0.12);
+            outline: none;
+        }
+
+        .info-popover {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: min(320px, calc(100vw - 40px));
+            padding: 14px 15px;
+            background: rgba(253, 251, 247, 0.98);
+            border: 1px solid rgba(189, 155, 91, 0.5);
+            border-radius: 10px;
+            box-shadow: 0 18px 34px rgba(58, 50, 44, 0.16);
+            color: #4b4038;
+            z-index: 120;
+        }
+
+        .info-popover.is-wide {
+            width: min(380px, calc(100vw - 40px));
+        }
+
+        .info-wrap.is-header .info-popover {
+            right: auto;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(560px, calc(100vw - 32px));
+            text-align: left;
+        }
+
+        .info-popover-title {
+            margin: 0 0 10px;
+            color: var(--king-bg);
+            font-size: 0.98rem;
+            letter-spacing: 0.06em;
+        }
+
+        .info-popover p {
+            margin: 0;
+            font-size: 0.92rem;
+            line-height: 1.75;
+        }
+
+        .info-popover p + p {
+            margin-top: 10px;
+        }
+
+        .info-list {
+            margin: 0;
+            padding-left: 1.2rem;
+            color: #5d5148;
+        }
+
+        .info-list li + li {
+            margin-top: 0.45rem;
+        }
+
+        .info-footnote {
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 0.88rem;
+            line-height: 1.7;
         }
 
         .references-panel {
@@ -335,14 +447,6 @@
         .references-panel a:hover {
             color: #18363a;
             border-bottom-color: rgba(24, 54, 58, 0.9);
-        }
-
-        .status-panel {
-            margin: 28px auto 0;
-            max-width: 1080px;
-            padding: 14px 18px;
-            color: var(--muted);
-            font-size: 0.92rem;
         }
 
         .modal {
@@ -449,6 +553,17 @@
             margin: 0;
             font-size: 0.98rem;
             line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .modal-title ruby {
+            ruby-align: center;
+        }
+
+        .modal-title rt {
+            color: var(--muted);
+            font-size: 0.38em;
+            letter-spacing: 0.02em;
         }
 
         .modal-box.is-classical {
@@ -465,6 +580,33 @@
             color: var(--minister-bg);
             text-decoration: none;
             border-bottom: 1px dashed rgba(43, 76, 80, 0.4);
+        }
+
+        .modal-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .modal-open-section {
+            appearance: none;
+            border: 1px solid rgba(43, 76, 80, 0.25);
+            border-radius: 999px;
+            background: rgba(43, 76, 80, 0.08);
+            color: var(--minister-bg);
+            padding: 8px 14px;
+            font: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.16s ease, transform 0.16s ease, border-color 0.16s ease;
+        }
+
+        .modal-open-section:hover,
+        .modal-open-section:focus-visible {
+            background: rgba(43, 76, 80, 0.14);
+            border-color: rgba(43, 76, 80, 0.45);
+            transform: translateY(-1px);
+            outline: none;
         }
 
         .loading,
@@ -515,6 +657,12 @@
             .modal-body {
                 padding: 18px 20px 22px;
             }
+
+            .info-wrap.is-header .info-popover {
+                left: 0;
+                right: auto;
+                transform: none;
+            }
         }
 
         @media (max-width: 560px) {
@@ -526,15 +674,26 @@
                 padding: 20px 26px;
             }
 
-            .context-panel,
-            .references-panel,
-            .status-panel {
+            .references-panel {
                 padding: 16px;
             }
 
             .modal {
                 padding: 12px;
             }
+
+            .header-meta {
+                gap: 8px;
+            }
+
+            .minister-title-row {
+                padding-right: 24px;
+            }
+
+            .s-head {
+                align-items: flex-start;
+            }
+
         }
     </style>
 </head>
@@ -545,14 +704,19 @@
     <main class="container">
         <header class="header">
             <h1 id="pageTitle">周礼六官学习图</h1>
-            <p id="pageSubtitle">按《周礼》六官与《考工记》冬官条目重整</p>
+            <div class="header-meta">
+                <p id="pageSubtitle">按《周礼》六官与《考工记》冬官条目重整</p>
+                <div class="info-wrap is-header" id="pageInfoWrap">
+                    <button class="info-btn" id="pageInfoBtn" type="button" aria-label="查看阅读说明" aria-expanded="false">i</button>
+                    <div class="info-popover is-wide" id="pageInfoPopover" hidden>
+                        <h2 class="info-popover-title">阅读说明</h2>
+                        <ul class="info-list" id="pageInfoList"></ul>
+                        <p class="info-footnote" id="pageInfoFootnote"></p>
+                    </div>
+                </div>
+            </div>
             <div class="ornament"></div>
         </header>
-
-        <section class="context-panel" aria-labelledby="contextTitle">
-            <h2 class="panel-title" id="contextTitle">校读说明</h2>
-            <ul id="contextNotes"></ul>
-        </section>
 
         <div class="org-tree">
             <div class="king-wrap">
@@ -571,10 +735,6 @@
             <h2 class="panel-title" id="referencesTitle">资料来源</h2>
             <ul id="referencesList"></ul>
         </section>
-
-        <section class="status-panel" id="statusPanel">
-            本页以原文为主线，白话和补充说明偏向学习入门。如果要进一步核对句读、异文和注疏，建议继续对照维基文库或更完整的《周礼注疏》版本。
-        </section>
     </main>
 
     <div class="modal" id="infoModal" aria-hidden="true">
@@ -588,12 +748,15 @@
         </div>
     </div>
 
+    <script src="./title-pronunciations.js"></script>
     <script src="./site-data.js"></script>
     <script>
         const dom = {
             title: document.getElementById("pageTitle"),
             subtitle: document.getElementById("pageSubtitle"),
-            notes: document.getElementById("contextNotes"),
+            pageInfoWrap: document.getElementById("pageInfoWrap"),
+            pageInfoList: document.getElementById("pageInfoList"),
+            pageInfoFootnote: document.getElementById("pageInfoFootnote"),
             references: document.getElementById("referencesList"),
             row: document.getElementById("departmentsRow"),
             loading: document.getElementById("loadingState"),
@@ -606,6 +769,8 @@
         };
 
         let lastFocusedCard = null;
+        const PAGE_FOOTNOTE = "卡片点开后可直接看本条原文全文与整段白话；每卷标题下方的“本卷全文”会在站内打开整卷原文，外部底本和《周礼注疏》参考链接仍然保留。";
+        const TITLE_PRONUNCIATIONS = window.__TITLE_PRONUNCIATIONS__ || {};
 
         function createElement(tag, className, text) {
             const element = document.createElement(tag);
@@ -637,37 +802,160 @@
             });
         }
 
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
+
+        function buildRuby(term, pronunciation) {
+            return `<ruby>${escapeHtml(term)}<rt>${escapeHtml(pronunciation)}</rt></ruby>`;
+        }
+
+        function annotateTitle(title) {
+            const pronunciation = TITLE_PRONUNCIATIONS[title];
+            if (!pronunciation) {
+                return escapeHtml(title);
+            }
+            return buildRuby(title, pronunciation);
+        }
+
+        function compactSubtitle(text) {
+            if (!text) {
+                return "";
+            }
+            return text.split(/[，。]/)[0] || text;
+        }
+
+        function setInfoOpen(wrapper, shouldOpen) {
+            if (!wrapper) {
+                return;
+            }
+            const button = wrapper.querySelector(".info-btn");
+            const popover = wrapper.querySelector(".info-popover");
+            wrapper.classList.toggle("open", shouldOpen);
+            if (button) {
+                button.setAttribute("aria-expanded", String(shouldOpen));
+            }
+            if (popover) {
+                popover.hidden = !shouldOpen;
+            }
+        }
+
+        function closeAllInfo(except = null) {
+            document.querySelectorAll(".info-wrap.open").forEach((wrapper) => {
+                if (wrapper !== except) {
+                    setInfoOpen(wrapper, false);
+                }
+            });
+        }
+
+        function attachInfoBehavior(wrapper) {
+            const button = wrapper.querySelector(".info-btn");
+            const popover = wrapper.querySelector(".info-popover");
+            if (!button || !popover) {
+                return wrapper;
+            }
+
+            button.addEventListener("click", (event) => {
+                event.stopPropagation();
+                const shouldOpen = !wrapper.classList.contains("open");
+                closeAllInfo(shouldOpen ? wrapper : null);
+                setInfoOpen(wrapper, shouldOpen);
+            });
+
+            popover.addEventListener("click", (event) => {
+                event.stopPropagation();
+            });
+
+            return wrapper;
+        }
+
+        function buildInfoWrap(content, options = {}) {
+            const wrapper = createElement(
+                "div",
+                `info-wrap${options.header ? " is-header" : ""}`
+            );
+            const button = createElement("button", "info-btn", "i");
+            button.type = "button";
+            button.setAttribute("aria-label", options.label || "查看说明");
+
+            const popover = createElement(
+                "div",
+                `info-popover${options.wide ? " is-wide" : ""}`
+            );
+            popover.hidden = true;
+
+            if (options.title) {
+                popover.appendChild(createElement("h3", "info-popover-title", options.title));
+            }
+
+            if (Array.isArray(content)) {
+                const list = createElement("ul", "info-list");
+                content.forEach((item) => {
+                    const li = document.createElement("li");
+                    li.textContent = item;
+                    list.appendChild(li);
+                });
+                popover.appendChild(list);
+            } else {
+                const paragraph = createElement("p", "", content);
+                popover.appendChild(paragraph);
+            }
+
+            wrapper.append(button, popover);
+            return attachInfoBehavior(wrapper);
+        }
+
         function buildDepartment(section) {
             const column = createElement("section", "dept-col");
             const minister = createElement("div", "minister-node");
+            const header = createElement("div", "minister-header");
+            const titleRow = createElement("div", "minister-title-row");
 
             const seal = createElement("div", "seal", section.seal);
             const title = createElement("h3", "m-title", section.title);
             const desc = createElement("p", "m-sub", section.desc);
-            const source = document.createElement("a");
-            source.className = "source-link";
-            source.href = section.sourceUrl;
-            source.target = "_blank";
-            source.rel = "noreferrer";
-            source.textContent = "查看本卷原文";
+            const source = document.createElement("button");
+            source.type = "button";
+            source.className = "source-button";
+            source.textContent = "本卷全文";
+            source.setAttribute("aria-label", `查看${section.title}全文`);
+            source.addEventListener("click", () => {
+                openSectionModal(section, source);
+            });
 
-            minister.append(seal, title, desc, source);
+            titleRow.appendChild(title);
+            header.append(titleRow, desc, source);
+            minister.append(seal, header);
 
             const list = createElement("div", "sub-list");
             section.items.forEach((item) => {
-                const button = document.createElement("button");
-                button.type = "button";
-                button.className = "sub-node";
-                button.addEventListener("click", () => openModal(section, item, button));
+                const card = createElement("article", "sub-node");
+                card.tabIndex = 0;
+                card.setAttribute("role", "button");
+                card.setAttribute("aria-label", `查看${item.title}详情`);
 
                 const head = createElement("div", "s-head");
                 const cardTitle = createElement("p", "s-title", item.title);
-                const tag = createElement("span", "s-tag", "点击查看");
-                head.append(cardTitle, tag);
+                head.appendChild(cardTitle);
 
-                const summary = createElement("p", "s-desc", item.summary);
-                button.append(head, summary);
-                list.appendChild(button);
+                card.addEventListener("click", () => {
+                    openModal(section, item, card);
+                });
+                card.addEventListener("keydown", (event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        openModal(section, item, card);
+                    }
+                });
+
+                card.appendChild(head);
+                if (item.summary) {
+                    card.appendChild(createElement("p", "s-desc", item.summary));
+                }
+                list.appendChild(card);
             });
 
             column.append(minister, list);
@@ -684,38 +972,112 @@
             return section;
         }
 
+        function appendExternalLinks(container, links) {
+            links.forEach((link, index) => {
+                if (index > 0) {
+                    container.append(" · ");
+                }
+                const anchor = document.createElement("a");
+                anchor.href = link.url;
+                anchor.target = "_blank";
+                anchor.rel = "noreferrer";
+                anchor.textContent = link.label;
+                container.appendChild(anchor);
+            });
+        }
+
+        function buildReferenceSection(section, item = null, includeReaderButton = false) {
+            const refSection = createElement("section", "modal-section");
+            const heading = createElement("h3", "", "参考入口");
+            refSection.appendChild(heading);
+
+            if (includeReaderButton) {
+                const actions = createElement("div", "modal-actions");
+                const readerButton = createElement("button", "modal-open-section", "本卷全文");
+                readerButton.type = "button";
+                readerButton.addEventListener("click", () => {
+                    openSectionModal(section);
+                });
+                actions.appendChild(readerButton);
+                refSection.appendChild(actions);
+            }
+
+            const links = [];
+            if (section.sourceUrl) {
+                links.push({ label: "维基文库底本", url: section.sourceUrl });
+            }
+            if (section.commentaryUrl) {
+                links.push({ label: "周礼注疏", url: section.commentaryUrl });
+            }
+            if (section.translationUrl) {
+                links.push({ label: "5000言总览", url: section.translationUrl });
+            }
+            if (item && item.pageUrl) {
+                links.push({ label: "本条分条页", url: item.pageUrl });
+            }
+
+            if (links.length) {
+                const source = createElement("p", "modal-source");
+                appendExternalLinks(source, links);
+                refSection.appendChild(source);
+            }
+
+            return refSection;
+        }
+
+        function showModal() {
+            dom.modal.classList.add("open");
+            dom.modal.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+            dom.closeBtn.focus();
+        }
+
         function openModal(section, item, trigger) {
+            closeAllInfo();
             lastFocusedCard = trigger;
-            dom.modalTitle.textContent = item.title;
+            dom.modalTitle.innerHTML = annotateTitle(item.title);
             dom.modalSubtitle.textContent = `${section.title} · ${item.summary}`;
             dom.modalBody.innerHTML = "";
 
             if (item.meta) {
                 dom.modalBody.appendChild(buildModalSection(item.metaLabel || "建置", item.meta));
             }
-            if (item.classical) {
-                dom.modalBody.appendChild(buildModalSection("原文节录", item.classical, true));
+            if (item.group) {
+                dom.modalBody.appendChild(buildModalSection(item.groupLabel || "所属序官", item.group));
             }
-            if (item.translation) {
-                dom.modalBody.appendChild(buildModalSection("白话", item.translation));
+            if (item.peer) {
+                dom.modalBody.appendChild(buildModalSection(item.peerLabel || "同列官", item.peer));
+            }
+            if (item.fullClassical || item.classical) {
+                dom.modalBody.appendChild(buildModalSection("原文全文", item.fullClassical || item.classical, true));
+            }
+            if (item.fullTranslation || item.translation) {
+                dom.modalBody.appendChild(buildModalSection("白话通解", item.fullTranslation || item.translation));
             }
             if (item.note) {
-                dom.modalBody.appendChild(buildModalSection("补充", item.note));
+                dom.modalBody.appendChild(buildModalSection("补充说明", item.note));
+            }
+            dom.modalBody.appendChild(buildReferenceSection(section, item, true));
+
+            showModal();
+        }
+
+        function openSectionModal(section, trigger = null) {
+            closeAllInfo();
+            if (trigger) {
+                lastFocusedCard = trigger;
             }
 
-            const source = createElement("p", "modal-source");
-            const sourceLink = document.createElement("a");
-            sourceLink.href = section.sourceUrl;
-            sourceLink.target = "_blank";
-            sourceLink.rel = "noreferrer";
-            sourceLink.textContent = "查看本卷原文";
-            source.append("原文卷页：", sourceLink);
-            dom.modalBody.appendChild(source);
+            dom.modalTitle.textContent = section.title;
+            dom.modalSubtitle.textContent = `${section.desc} · 本卷全文`;
+            dom.modalBody.innerHTML = "";
 
-            dom.modal.classList.add("open");
-            dom.modal.setAttribute("aria-hidden", "false");
-            document.body.style.overflow = "hidden";
-            dom.closeBtn.focus();
+            if (section.fullClassical) {
+                dom.modalBody.appendChild(buildModalSection("本卷全文", section.fullClassical, true));
+            }
+            dom.modalBody.appendChild(buildReferenceSection(section));
+
+            showModal();
         }
 
         function closeModal() {
@@ -729,8 +1091,9 @@
 
         function renderPage(data) {
             dom.title.textContent = data.meta.title;
-            dom.subtitle.textContent = data.meta.subtitle;
-            renderList(dom.notes, data.meta.notes);
+            dom.subtitle.textContent = compactSubtitle(data.meta.subtitle);
+            renderList(dom.pageInfoList, data.meta.notes || []);
+            dom.pageInfoFootnote.textContent = PAGE_FOOTNOTE;
             renderList(dom.references, data.meta.references, true);
 
             dom.row.innerHTML = "";
@@ -765,9 +1128,21 @@
             }
         });
 
+        attachInfoBehavior(dom.pageInfoWrap);
+
+        document.addEventListener("click", (event) => {
+            if (!event.target.closest(".info-wrap")) {
+                closeAllInfo();
+            }
+        });
+
         window.addEventListener("keydown", (event) => {
             if (event.key === "Escape" && dom.modal.classList.contains("open")) {
                 closeModal();
+                return;
+            }
+            if (event.key === "Escape") {
+                closeAllInfo();
             }
         });
 
