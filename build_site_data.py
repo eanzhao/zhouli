@@ -373,6 +373,10 @@ def raw_lookup_title(display_title: str) -> str:
     return RAW_TITLE_MAP.get(display_title, display_title)
 
 
+def strip_leading_clause_punctuation(text: str) -> str:
+    return text.lstrip("，,：:；;。!?！？ ")
+
+
 def strip_prefix(title: str, text: str) -> str:
     raw_title = raw_lookup_title(title)
     if text.startswith(raw_title + "之职，"):
@@ -382,7 +386,7 @@ def strip_prefix(title: str, text: str) -> str:
     if text.startswith(raw_title + "，"):
         return text[len(raw_title) + 1 :]
     if text.startswith(raw_title):
-        return text[len(raw_title) :]
+        return strip_leading_clause_punctuation(text[len(raw_title) :])
     return text
 
 
